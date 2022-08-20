@@ -1,5 +1,6 @@
 import subprocess
 import parted
+import os
 
 class Partitioner:
     def __init__(self, block_device_path):
@@ -8,6 +9,7 @@ class Partitioner:
         self.device = parted.Device(block_device_path)
         self.disk = None
         self._first_free_sector = None
+
         # self.umount(block_device_path)
     
     @property
@@ -15,16 +17,38 @@ class Partitioner:
         if self._first_free_sector is None:
             self._first_free_sector = 1
         return self._first_free_sector
+    def is_mounted(self, path):
+        with open("/proc/mounts", "r") as mounts:
+            if  path in mounts.read():
+                return True
+            return False
+    def check_for_mount(self, block_device_path):
+        print("Checking for mounted partitions.")
+        path = "/dev/"
+        dev_name = block_device_path.split("/")[-1]
+        dev_name = [f"{file}" for file in os.listdir(path) if file.startswith(dev_name)]
+        print(dev_name)
+        for device in dev_name:
+            dev_path = f"{path}{device}"
+            print(dev_path)
+            if self.is_mounted(dev_path):
+                print(f"Device: {dev_path} is mounted. Try to Umount it.")
+
+                self.umount(f"{dev_path}")
+
+
     def umount(self, partition_path):
         print(f"Umounting {partition_path}")
         command = [
             "umount",
-            f"{partition_path}*"
+            f"{partition_path}"
         ]
         print(command)
         subprocess.check_output(command)
         return True
+
     def create_partition_table(self, partition_table_type):
+        self.check_for_mount(self.block_device_path)
         print(f"Creating partition table {partition_table_type}")
         self.disk = parted.freshDisk(self.device, partition_table_type)
         res = self.disk.commit()

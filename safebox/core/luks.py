@@ -52,7 +52,8 @@ class Luks:
             mount_point.mkdir(parents=True)
         command = [
             'mount',
-            '-o rw,nosuid,nodev,relatime,user_id=0,group_id=0,default_permissions,allow_other,uhelper=udisks2',
+            # '-o rw,nosuid,nodev,relatime,default_permissions,allow_other,uhelper=udisks2',
+            # '-o rw,nosuid,nodev,default_permissions',
             source_path,
             str(mount_point)
         ]
