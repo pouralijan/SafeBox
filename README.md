@@ -15,3 +15,20 @@ poetry build
 poetry install
 sudo python -m safebox
 ```
+
+## Todo
+
+- [X] Create SafeBox creator App
+- [ ] Add logger
+- [ ] Create unlock App
+- [ ] Fix permission denied exception
+- [ ] Add permission denied exception handler and show correct message in GUI
+- [ ] Add theme selector
+- [ ] Add installation documents.
+- [ ] Add usage documents
+- [ ] Add system try-icon for unlock App
+- [ ] Add selected device information
+- [ ] Show process indicator on creating the partition
+- [ ] Show a message after creating the partition
+- [ ] Change creates SafeBox bottom to open SafeBox after creating the partition
+- [ ] Detect this device is SafeBox or not.
